@@ -91,7 +91,7 @@ const Home = () =>{
                                                 {/*<p className="card-text">Vest Tokens and receive rewards</p>*/}
                                             </div>
                                             <div className="card-body"><a href="#"><button type="button"
-                                                className="btn btn-secondary">{ethers.formatEther(data[6].result.toString())} {data[1].result}</button></a></div>
+                                                className="btn btn-secondary">{ethers.formatEther(data[6].result)} {data[1].result}</button></a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@ const Home = () =>{
                                             </div>
                                             <div className="card-body"><a href="#">
                                                 <button type="button"
-                                                    className="btn btn-secondary">{dataLoading ? <>Loading..</>: ethers.formatEther(data[5].result[2].toString())} {data[1].result}</button>
+                                                    className="btn btn-secondary">{dataLoading ? <>Loading..</>: ethers.formatEther(data[5].result[2])} {data[1].result}</button>
 
                                             </a></div>
                                         </div>
@@ -198,7 +198,7 @@ const Home = () =>{
                                             <div className="PanelLeft">
                                                 <div>
                                                     <h5 className="heading-text ">Vested Status</h5>
-                                                    <h5 className="price-txt">{address?data[5].result[0].toString() == "0"? <>Not Eligible</>:<>Eligible</>:<>Loading...</>}</h5>
+                                                    <h5 className="price-txt">{address?data[5].result[0].toString() === "0"? <>Not Eligible</>:<>Eligible</>:<>Loading...</>}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -230,7 +230,7 @@ const Home = () =>{
                                             <div className="PanelLeft">
                                                 <div>
                                                     <h5 className="heading-text ">Vesting Type</h5>
-                                                    <h5 className="price-txt">{address?data[5].result[0].toString() == "0"? <>Not Eligible</>:<>{data[5].result[3]}</>:<>Loading...</>}</h5>
+                                                    <h5 className="price-txt">{address?data[5].result[0].toString() === "0"? <>Not Eligible</>:<>{data[5].result[3]}</>:<>Loading...</>}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -244,7 +244,7 @@ const Home = () =>{
                                             <div className="PanelLeft">
                                                 <div>
                                                     <h5 className="heading-text ">Vested time</h5>
-                                                    <h5 className="price-txt">{address?data[5].result[0].toString() == "0"? <>Not Eligible</>:<>{data[5].result[1].toString()}</>:<>Loading..</>}</h5>
+                                                    <h5 className="price-txt">{address?data[5].result[0].toString() === "0"? <>Not Eligible</>:<>{data[5].result[1].toString()}</>:<>Loading..</>}</h5>
                                                 </div>
                                             </div>
                                         </div>
