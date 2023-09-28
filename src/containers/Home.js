@@ -6,11 +6,13 @@ import iconVesting from '../images/stake-icon-news.png'
 import perconalVesting from '../images/reward-icon.png'
 import { ethers } from "ethers"
 import Owner from './owner'
+import {useSelector} from 'react-redux';
 
 const tokenAddress = "0xdc66162ae7c2ec6ad8e024727ef781a204be249a"
 const vestingAddress = "0x226f963b332e0c4b164c97f801b54bbec6ee9140"
 
 const Home = () =>{
+    let wallet = useSelector(state => state);
     const { address, isConnecting, isDisconnected } = useAccount()
     const contract = {
         address: tokenAddress,
