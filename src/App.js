@@ -4,7 +4,7 @@ import './App.css';
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from './containers/header';
-// import Home from './containers/Home';
+import Home from './containers/Home';
 import React, { useState, useEffect } from 'react';
 import Web3 from "web3"
 const projectId = '134fa3cd46dbcda9a71fd6ff20375964'
@@ -18,7 +18,7 @@ function App() {
 
     <div className="App">
       <Navigation />
-      
+      <Home />
     </div>
 
     

@@ -6,7 +6,7 @@ import {setInstalled, setLoggin, setAddress, setWeb3} from '../store/actions';
 const Navigation = () => {
     const dispatch = useDispatch();
     let wallet = useSelector(state => state);
-    console.log(wallet)
+    // console.log(wallet)
 
     useEffect(() => {
         if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
@@ -42,7 +42,7 @@ const Navigation = () => {
         checkChain(web3Instance, (d) => {
             ch = d;
         });
-        console.log(ch)
+        
         window.ethereum.request({ method: 'eth_requestAccounts' })
         .then((accounts) => {
             
@@ -51,7 +51,7 @@ const Navigation = () => {
             console.log(error);
         })
         
-        console.log(wallet.user)
+       
     }
 
     return(
