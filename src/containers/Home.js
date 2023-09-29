@@ -15,7 +15,7 @@ import contractData from '../helpers/contracthelper';
 
 const Home = () => {
         let wallet = useSelector(state => state);
-        const history = useHistory();
+        
 
         const [tokenData, setToken] = useState({symbol:"Loading...", supply: 0, loading: true});
         const [vestData, setVest] = useState({data:[], total: 0, owner: null})
