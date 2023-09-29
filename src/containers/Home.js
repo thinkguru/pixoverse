@@ -10,7 +10,7 @@ import Owner from './owner'
 import {useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import contractData from '../helpers/contracthelper';
-import { useHistory } from 'react-router-dom';
+
 
 
 const Home = () => {
@@ -23,7 +23,7 @@ const Home = () => {
         
        
         const handleOwner = () => {
-            history.push('/owner')
+            console.log("owner link");
         }
 
         useEffect(() => {
