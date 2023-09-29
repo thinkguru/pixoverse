@@ -20,21 +20,55 @@ const Home = () => {
         const [tokenData, setToken] = useState({symbol:"Loading...", supply: 0, loading: true});
         const [vestData, setVest] = useState({data:[], total: 0, owner: null})
         const[isOwner, setOwner] = useState(false)
-        
+        const [nxtwith, setWith] = useState(null)
+        const [withdraw, setWithdraw] = useState(0)
+        const [timeline, setTimeline] = useState([])
        
         const handleOwner = () => {
             console.log("owner link");
         }
+
+        function formatDateToCustomFormat(date) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+            const year = date.getFullYear().toString();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+          
+            return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+          }
 
         useEffect(() => {
             const finalData = async () => {
                 try{
                     let d = await contractData(wallet.user.address);
                     if(d != false){
-                        console.log(d)
+                        // console.log(d)
                         setToken({symbol: d[0], supply: d[1], loading: false})
                         setVest({data: d[2], total: d[4], owner: d[3]})
                         setOwner(d[5])
+                        let date = new Date(d[2]._time * 1000)
+                        let oneDayLater = new Date(date);
+                        oneDayLater.setDate(date.getDate() + 1);
+                        const formattedDate = formatDateToCustomFormat(oneDayLater);
+                        // console.log(oneDayLater)
+                        setWith(formattedDate)
+                        const withdraw = d[2]._available * d[6]._percent / 10000;
+                        setWithdraw(withdraw)
+                        const months = d[6]._day;
+                        const month = months / 30;
+                        let startTime = d[2]._stakeTime;
+                        let timeLine = [];
+                        for(let i = 0; i< month; i++){
+                            let nxtd = parseInt(startTime) + 86400;
+                            startTime = nxtd;
+                            timeLine.push(new Date(nxtd * 1000))
+                            // setTimeline(timeline => [...timeline, new Date(nxtd * 1000)])
+                        }
+
+                        setTimeline(timeLine)
+                        console.log(timeline)
                     }
                     
                 } catch (e) {
@@ -61,6 +95,10 @@ const Home = () => {
                 )
         }
 
+        if(isOwner){
+            return(<Owner />)
+        }
+
         
         return(
             <div className="mt-5 container">
@@ -80,7 +118,7 @@ const Home = () => {
                                                 {/*<p className="card-text">Vest Tokens and receive rewards</p>*/}
                                             </div>
                                             <div className="card-body"><a href="#"><button type="button"
-                                                className="btn btn-secondary">{vestData.total} {tokenData.symbol}</button></a></div>
+                                                className="btn btn-secondary">{vestData.total / 10 ** 18} {tokenData.symbol}</button></a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +132,7 @@ const Home = () => {
                                             </div>
                                             <div className="card-body"><a href="#">
                                                 <button type="button"
-                                                    className="btn btn-secondary">{vestData.data._amount} {tokenData.symbol}</button>
+                                                    className="btn btn-secondary">{vestData.data._amount / 10 ** 18} {tokenData.symbol}</button>
 
                                             </a></div>
                                         </div>
@@ -171,10 +209,10 @@ const Home = () => {
                                         <div className="home-card">
                                             <form className="form-submit">
 
-                                                <p>You can withdraw {vestData.data._available} PIXO</p>
+                                                <p>You can withdraw {withdraw / 10 ** 18} PIXO after {nxtwith}</p>
                                                 <input type="button" className="btn btn-secondary" value="Withdraw" />
 
-                                                {isOwner?<button onclick={handleOwner}>Admin</button>:<>not owner</>}
+                                               
                                                 
                                             </form>
                                         </div>
@@ -249,7 +287,14 @@ const Home = () => {
                                             <div className="PanelLeft">
                                                 <div>
                                                     <h5 className="heading-text ">Withdraw Timeline</h5>
-                                                    <h5 className="price-txt">date time</h5>
+                                                    {timeline.length > 0 ?<>
+                                                    {timeline.map((t) => {
+                                                        <h5 className="price-txt">{formatDateToCustomFormat(t)}</h5>
+                                                    })}</>:
+                                                    <h5>No data</h5>
+                                                }
+                                                    
+                                                    
                                                 </div>
                                             </div>
                                         </div>

@@ -14,13 +14,15 @@ const contractData = async (address) =>{
         const stake = await vestContract.methods.stakes(address).call();
         const owner = await vestContract.methods.owner().call();
         const total = await vestContract.methods.totalVesting().call();
+        
+        const available = await vestContract.methods.plans(stake._type).call();
         let isAdmin = false;
         if(owner.toLowerCase() == address.toLowerCase()){
             isAdmin = true;
         }else{
             isAdmin = false;
         }
-        return [symbol, supply, stake, owner, total, isAdmin];
+        return [symbol, supply, stake, owner, total, isAdmin, available];
     } catch (er) {
         return false;
     }
