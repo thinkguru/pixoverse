@@ -9,45 +9,41 @@ import { ethers } from "ethers"
 import Owner from './owner'
 import {useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
-import Web3 from 'web3';
+import contractData from '../helpers/contracthelper';
+import { useHistory } from 'react-router-dom';
 
 
 const Home = () => {
         let wallet = useSelector(state => state);
+        const history = useHistory();
+
         const [tokenData, setToken] = useState({symbol:"Loading...", supply: 0, loading: true});
-        const [vestData, setVest] = useState({data:[], total: 0})
+        const [vestData, setVest] = useState({data:[], total: 0, owner: null})
+        const[isOwner, setOwner] = useState(false)
         
-        const getTokenData = () => {
-            let web3 = new Web3(window.ethereum);
-            const cont = new web3.eth.Contract(tokenAbi, constants.token);
-            cont.methods.symbol().call().then((r) => {
-                setToken({...tokenData, symbol: r})
-            }).catch((er) => {
-                console.log(er)
-            })
-
-            cont.methods.totalSupply().call().then((r) => {
-                setToken({...tokenData, supply: r})
-            }).catch((er) => {
-                console.log(er)
-            })
+       
+        const handleOwner = () => {
+            history.push('/owner')
         }
 
-        const getContractData = () => {
-            let web3 = new Web3(window.ethereum);
-            const cont = new web3.eth.Contract(vestingAbi, constants.vesting);
-            cont.methods.stakes(wallet.user.address).call().then((d) => {
-                setVest({...vestData, data:d})
-            }).catch((er) => {
-                console.log(er)
-            })
-
-            cont.methods.totalVesting().call().then((d) => {
-                setVest({...vestData, total:d})
-            }).catch((e) => {
-                console.log(e)
-            })
-        }
+        useEffect(() => {
+            const finalData = async () => {
+                try{
+                    let d = await contractData(wallet.user.address);
+                    if(d != false){
+                        console.log(d)
+                        setToken({symbol: d[0], supply: d[1], loading: false})
+                        setVest({data: d[2], total: d[4], owner: d[3]})
+                        setOwner(d[5])
+                    }
+                    
+                } catch (e) {
+                    console.log(e)
+                }
+            }     
+            finalData();
+            
+        },[wallet.user.loggedIn])
        
         if(!wallet.user.installed){
             return(
@@ -58,15 +54,14 @@ const Home = () => {
             return(
                 <div className='disconnected'>Log in to your wallet</div> 
                 )
-        }else{
-            getTokenData();
-            getContractData();
         }
         if(wallet.user.chainId != constants.chain){
             return(
                 <div className='disconnected'>Please Select bsc testnet</div> 
                 )
         }
+
+        
         return(
             <div className="mt-5 container">
                     <div className="row">
@@ -178,6 +173,9 @@ const Home = () => {
 
                                                 <p>You can withdraw {vestData.data._available} PIXO</p>
                                                 <input type="button" className="btn btn-secondary" value="Withdraw" />
+
+                                                {isOwner?<button onclick={handleOwner}>Admin</button>:<>not owner</>}
+                                                
                                             </form>
                                         </div>
                                     </div>
