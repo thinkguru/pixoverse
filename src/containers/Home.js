@@ -10,6 +10,7 @@ import Owner from './owner'
 import {useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import contractData from '../helpers/contracthelper';
+import timelinedata from '../helpers/timeline';
 
 
 
@@ -23,6 +24,7 @@ const Home = () => {
         const [nxtwith, setWith] = useState(null)
         const [withdraw, setWithdraw] = useState(0)
         const [timeline, setTimeline] = useState([])
+        const [staketime, setStaketime] = useState(0)
        
         const handleOwner = () => {
             console.log("owner link");
@@ -56,19 +58,16 @@ const Home = () => {
                         setWith(formattedDate)
                         const withdraw = d[2]._available * d[6]._percent / 10000;
                         setWithdraw(withdraw)
+                        setStaketime(formatDateToCustomFormat(new Date(d[2]._stakeTime * 1000)));
                         const months = d[6]._day;
                         const month = months / 30;
                         let startTime = d[2]._stakeTime;
-                        let timeLine = [];
-                        for(let i = 0; i< month; i++){
-                            let nxtd = parseInt(startTime) + 86400;
-                            startTime = nxtd;
-                            timeLine.push(new Date(nxtd * 1000))
-                            // setTimeline(timeline => [...timeline, new Date(nxtd * 1000)])
-                        }
-
-                        setTimeline(timeLine)
-                        console.log(timeline)
+                        
+                        
+                        timelinedata(startTime, month, (d) => {
+                            setTimeline(d)
+                        })
+                        
                     }
                     
                 } catch (e) {
@@ -273,7 +272,7 @@ const Home = () => {
                                             <div className="PanelLeft">
                                                 <div>
                                                     <h5 className="heading-text ">Vested time</h5>
-                                                    <h5 className="price-txt">{vestData.data._stakeTime != 0?<>{vestData.data._stakeTime}</>:<>No vesting</>}</h5>
+                                                    <h5 className="price-txt">{vestData.data._stakeTime != 0?<>{staketime}</>:<>No vesting</>}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -287,9 +286,13 @@ const Home = () => {
                                             <div className="PanelLeft">
                                                 <div>
                                                     <h5 className="heading-text ">Withdraw Timeline</h5>
+                                                    {/* {console.log(timeline.length)} */}
                                                     {timeline.length > 0 ?<>
-                                                    {timeline.map((t) => {
-                                                        <h5 className="price-txt">{formatDateToCustomFormat(t)}</h5>
+                                                    {timeline.map((t, i) => {
+                                                        return(
+                                                            <h5 className="price-txt">{t}</h5>
+                                                        )
+                                                        
                                                     })}</>:
                                                     <h5>No data</h5>
                                                 }
