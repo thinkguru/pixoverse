@@ -29,9 +29,10 @@ const contractData = async (address) =>{
     
 }
 
-const withdrawDeposit = async (address) => {
+const withdrawDeposit = async (address, type) => {
+    console.log("withdraw...")
     try{
-    let tx = await vestContract.methods.withdraw().send({
+    let tx = await vestContract.methods.withdraw(address, type).send({
         from: address,
         gas: 7000000,
         gasPrice: 10 ** 9,

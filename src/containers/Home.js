@@ -30,8 +30,8 @@ const Home = () => {
             console.log("owner link");
         }
 
-        const withdrawProcess = () => {
-            let wd = withdrawDeposit(wallet.user.address)
+        const withdrawProcess = async () => {
+            let wd = await withdrawDeposit(wallet.user.address, vestData.data._type)
             if(!wd){
                 console.log("withdraw error");
             }else{
