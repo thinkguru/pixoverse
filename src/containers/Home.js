@@ -9,7 +9,7 @@ import { ethers } from "ethers"
 import Owner from './owner'
 import {useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
-import contractData from '../helpers/contracthelper';
+import {contractData,withdrawDeposit} from '../helpers/contracthelper';
 import timelinedata from '../helpers/timeline';
 
 
@@ -28,6 +28,15 @@ const Home = () => {
        
         const handleOwner = () => {
             console.log("owner link");
+        }
+
+        const withdrawProcess = () => {
+            let wd = withdrawDeposit(wallet.user.address)
+            if(!wd){
+                console.log("withdraw error");
+            }else{
+                console.log(wd);
+            }
         }
 
         function formatDateToCustomFormat(date) {
@@ -209,7 +218,7 @@ const Home = () => {
                                             <form className="form-submit">
 
                                                 <p>You can withdraw {withdraw / 10 ** 18} PIXO after {nxtwith}</p>
-                                                <input type="button" className="btn btn-secondary" value="Withdraw" />
+                                                <input type="button" onClick={withdrawProcess} className="btn btn-secondary" value="Withdraw" />
 
                                                
                                                 

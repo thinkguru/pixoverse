@@ -1,4 +1,4 @@
-import tokenAbi from '../containers/tokenAbi'
+import tokenAbi from '../containers/tokenAbi.json'
 import vestingAbi from '../containers/vestingabi.json'
 import Web3 from 'web3';
 import constants from '../containers/constants.json'

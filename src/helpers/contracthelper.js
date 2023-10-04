@@ -29,4 +29,17 @@ const contractData = async (address) =>{
     
 }
 
-export default contractData;
+const withdrawDeposit = async (address) => {
+    try{
+    let tx = await vestContract.methods.withdraw().send({
+        from: address,
+        gas: 7000000,
+        gasPrice: 10 ** 9,
+    })
+    return tx;
+    } catch (er) {
+        return false;
+    }
+}
+
+export {contractData, withdrawDeposit};
